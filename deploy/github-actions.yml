@@ -1,0 +1,51 @@
+# 复制到仓库根目录 .github/workflows/deploy.yml 即生效。
+# 仓库根约定为 ft-lab/，本文件里的相对路径都基于该目录。
+# 与 Cloudflare 的「Git 集成」二选一：两者同时启用会重复部署到同一项目。
+# 选 Git 集成时不要复制本文件，改用 deploy/deploy.sh --build --prepare 提交 public/。
+# 前置：GitHub 仓库 Secrets 里建两个值
+#   CLOUDFLARE_API_TOKEN   Cloudflare Dashboard → API Tokens → Custom Token
+#                          权限 Account / Cloudflare Pages / Edit
+#   CLOUDFLARE_ACCOUNT_ID  Cloudflare Dashboard → 任一 Zone Overview → 右侧 API 区
+name: deploy-tutorials
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.13'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Install pinned wrangler
+        run: npm install --prefix deploy --no-audit --no-fund
+
+      - name: Verify numbers
+        run: |
+          python3 -m pip install --quiet numpy
+          python3 verify/asserts.py
+          python3 fromscratch/verify/deep_asserts.py
+
+      - name: Build two HTML files
+        run: |
+          python3 build.py
+          (cd fromscratch && python3 build_deep.py)
+
+      - name: Check bundle (offline)
+        run: bash deploy/deploy.sh --check
+
+      - name: Deploy to Cloudflare Pages
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: bash deploy/deploy.sh --target pages --project ft-lab-tutorials

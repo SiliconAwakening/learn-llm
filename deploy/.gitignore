@@ -1,0 +1,3 @@
+node_modules/
+.wrangler/
+# public/ 不忽略：Cloudflare Git 集成直接发布这个目录里的 3 个 HTML

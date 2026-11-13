@@ -1,0 +1,9 @@
+{
+  "name": "ft-lab-deploy",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Pinned wrangler for deploying the ft-lab single-file tutorials",
+  "devDependencies": {
+    "wrangler": "4.160.1"
+  }
+}

@@ -1,0 +1,19 @@
+# 依赖与本地缓存
+deploy/node_modules/
+deploy/.wrangler/
+**/__pycache__/
+*.py[cod]
+.DS_Store
+
+# 本地生成物：由 build.py / build_deep.py / deploy.sh 重建
+dist/
+fromscratch/dist/
+fromscratch/data/
+fromscratch/data_bpe/
+fromscratch/ckpt.npz
+fromscratch/shots/
+labs/*.npz
+
+# 注意：deploy/public/ 必须入库。
+# Cloudflare Pages 的 Git 集成把该目录作为 build output directory 直接发布，
+# 无需 build command、无需 Secrets、无需 CI。
