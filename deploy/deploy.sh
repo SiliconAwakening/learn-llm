@@ -282,7 +282,7 @@ printf 'checks=%s fails=%s %s\n' "$CHECKS" "$FAILS" "$([ "$FAILS" -eq 0 ] && ech
 if [ "$TARGET" = "pages" ]; then
   CMD="${WRANGLER[*]} pages deploy public --project-name=${PROJECT} --branch=${BRANCH}"
 else
-  CMD="${WRANGLER[*]} deploy --config wrangler.jsonc"
+  CMD="${WRANGLER[*]} deploy --config wrangler.local.jsonc"
 fi
 printf '[plan] target=%s project=%s branch=%s\n' "$TARGET" "$PROJECT" "$BRANCH"
 printf '[plan] %s\n' "$CMD"
@@ -306,7 +306,7 @@ printf '[deploy] 开始\n'
 if [ "$TARGET" = "pages" ]; then
   ( cd "$DEPLOY_DIR" && "${WRANGLER[@]}" pages deploy public --project-name="$PROJECT" --branch="$BRANCH" )
 else
-  ( cd "$DEPLOY_DIR" && "${WRANGLER[@]}" deploy --config wrangler.jsonc )
+  ( cd "$DEPLOY_DIR" && "${WRANGLER[@]}" deploy --config wrangler.local.jsonc )
 fi
 printf '[deploy] 完成\n'
 
