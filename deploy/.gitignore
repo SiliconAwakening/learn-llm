@@ -1,5 +1,3 @@
 node_modules/
 .wrangler/
-# 本地手动部署用的 wrangler 配置（不入库，避免 Cloudflare Git 集成误判为 Workers 项目）
-wrangler.local.jsonc
 # public/ 不忽略：Cloudflare Git 集成直接发布这个目录里的 3 个 HTML
